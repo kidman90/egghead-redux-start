@@ -8,6 +8,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/redux/3.3.1/redux.js"></script>
   <script src="https://fb.me/react-0.14.7.js"></script>
   <script src="https://fb.me/react-dom-0.14.7.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/react-redux/4.0.0/react-redux.js"></script>
 </head>
 
 <body>
@@ -268,21 +269,7 @@
       </div>
     );
 
-    class Provider extends Component {
-      getChildContext() {
-        return {
-          store: this.props.store
-        };
-      }
-
-      render() {
-        return this.props.children;
-      }
-    }
-    Provider.childContextTypes = {
-      store: React.PropTypes.object
-    };
-
+    const { Provider } = ReactRedux;
     const { createStore } = Redux;
 
     ReactDOM.render(

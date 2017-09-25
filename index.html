@@ -69,6 +69,29 @@
       visibilityFilter
     });
 
+    let nextTodoId = 0;
+    const addTodo = (text) => {
+      return {
+        type: 'ADD_TODO',
+        id: nextTodoId++,
+        text
+      };
+    };
+
+    const toggleTodo = (id) => {
+      return {
+        type: 'TOGGLE_TODO',
+        id
+      };
+    };
+
+    const setVisibilityFilter = (filter) => {
+      return {
+        type: 'SET_VISIBILITY_FILTER',
+        filter
+      };
+    };
+
     const { Component } = React;
     const { connect } = ReactRedux;
 
@@ -107,10 +130,9 @@
     ) => {
       return {
         onClick: () => {
-          dispatch({
-            type: 'SET_VISIBILITY_FILTER',
-            filter: ownProps.filter
-          });
+          dispatch(
+            setVisibilityFilter(ownProps.filter)
+          );
         }
       };
     };
@@ -149,30 +171,30 @@
       completed,
       text
     }) => (
-        <li
-          onClick={onClick}
-          style={{
-            textDecoration: completed ? 'line-through' : 'none'
-          }}
-        >
-          {text}
-        </li>
-      );
+      <li
+        onClick={onClick}
+        style={{
+          textDecoration: completed ? 'line-through' : 'none'
+        }}
+      >
+        {text}
+      </li>
+    );
 
     const TodoList = ({
       todos,
       onTodoClick
     }) => (
-        <ul>
-          {todos.map(todo =>
-            <Todo
-              key={todo.id}
-              {...todo}
-              onClick={() => onTodoClick(todo.id)}
-            />
-          )}
-        </ul>
-      );
+      <ul>
+        {todos.map(todo =>
+          <Todo
+            key={todo.id}
+            {...todo}
+            onClick={() => onTodoClick(todo.id)}
+          />
+        )}
+      </ul>
+    );
 
     let AddTodo = ({ dispatch }) => {
       let input;
@@ -182,11 +204,7 @@
             input = node;
           }} />
           <button onClick={() => {
-            dispatch({
-              type: 'ADD_TODO',
-              id: nextTodoId++,
-              text: input.value
-            })
+            dispatch(addTodo(input.value));
             input.value = '';
           }}>
             Add Todo
@@ -225,10 +243,7 @@
     ) => {
       return {
         onTodoClick: (id) => {
-          dispatch({
-            type: 'TOGGLE_TODO',
-            id
-          })
+          dispatch(toggleTodo(id))
         }
       };
     };
@@ -237,7 +252,6 @@
       mapDispatchToTodoListProps
     )(TodoList);
 
-    let nextTodoId = 0;
     const TodoApp = () => (
       <div>
         <AddTodo />
